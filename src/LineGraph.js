@@ -51,7 +51,7 @@ const options = {
 };
 
 
-function LinteGraph({casesType = "cases"}) {
+function LinteGraph({casesType = "cases", className}) {
 
     const [data, setData] = useState({});
 
@@ -64,12 +64,12 @@ function LinteGraph({casesType = "cases"}) {
             if (lastDataPoint){
                 const newDataPoint = {
                     x:date,
-                    y:data['cases'][date] - lastDataPoint
+                    y:data[casesType][date] - lastDataPoint
                 };
 
                 chartData.push(newDataPoint);
             }
-            lastDataPoint = data['cases'][date];
+            lastDataPoint = data[casesType][date];
         }
 
         return chartData;
@@ -82,7 +82,7 @@ function LinteGraph({casesType = "cases"}) {
         .then((response) => response.json())
         .then((data) => {
             
-           let chartData =  buildChartData(data, "cases");
+           let chartData =  buildChartData(data, casesType);
            setData(chartData);
         })
     }
@@ -93,7 +93,7 @@ function LinteGraph({casesType = "cases"}) {
 
    
     return (
-        <div>
+        <div className = {className}>
             {data?.length>0  && (
                     <Line options = {options} 
                     data= {{
