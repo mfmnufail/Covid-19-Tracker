@@ -6,6 +6,7 @@ import InfoBox from './InfoBox'
 import Table from './Table'
 import {sortData} from "./util.js";
 import LineGraph from './LineGraph'
+import "leaflet/dist/leaflet.css";
  
 
 function App() {
@@ -14,6 +15,9 @@ function App() {
   const [country, setCountry] = useState("worldwide");
   const [countryInfo, setCountryInfo] = useState({});
   const [tableData, setTableData] = useState([]);
+  const [mapCenter, setMapCenter] = useState({ lat:34.80746 , lng:-40.4796});
+  const [mapZoom, setMapZoom] = useState(3);
+  const [mapCountries, setMapCountries] = useState([]);
 
 
   useEffect(()=>{
@@ -42,6 +46,7 @@ function App() {
          const sortedData = sortData(data);
          setTableData(sortedData);
        setCountries(countries);
+       setMapCountries(data);
 
      });
 
@@ -61,6 +66,9 @@ function App() {
      await fetch(url)
     .then((response) => response.json())
     .then((data) => {
+
+        setMapCenter([data.countryInfo.lat, data.countryInfo.long]);
+        setMapZoom(4);
         setCountryInfo(data);
     })
 
@@ -88,7 +96,7 @@ function App() {
         <InfoBox title = "Deaths" cases={countryInfo.todayDeaths} total = {countryInfo.deaths}/>
       </div>
 
-      <Map/>
+      <Map countries = {mapCountries} center = {mapCenter} zoom = {mapZoom}/>
 
       </div>
 
